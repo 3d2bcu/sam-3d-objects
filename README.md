@@ -1,4 +1,4 @@
-# SAM 3D: Segment Anything 
+# SAM 3D Objects
 
 **[AI at Meta, FAIR](https://ai.meta.com/research/)**
 
@@ -12,7 +12,7 @@
 
 ## Latest updates
 
-**10/15/2025 -- Checkpoints Launched, Dataset Released, Web Demo and Paper are out**
+**10/20/2025 -- Checkpoints Launched, Web Demo and Paper are out**
 - < MORE DETAILS HERE >
 
 ## Installation
@@ -21,43 +21,39 @@
 
 ## Getting Started
 
-### Download Checkpoints
+Follow the [setup](doc/setup.md) steps before running the following.
 
-First, we need to download a model checkpoint. All the model checkpoints can be downloaded by running:
+### Single or Multi-Object 3D generation.
 
-< DOWNLOAD CLI INSTRUCTIONS HERE >
+SAM 3D Objects can convert masked objects in an image, into 3D models with pose.
 
-Then SAM 3D can be used in a few lines as follows for image prediction.
+```python
+# import inference code
+sys.path.append("notebook")
+from inference import Inference, load_image
 
-### Image prediction
+# load model
+tag = "public_v0"
+config_path = f"checkpoints/{tag}/pipeline.yaml"
+inference = Inference(config_path, compile=False)
 
-< MODELS DESCRIPTION HERE >
+# load image (RGBA only, mask is embedded in the alpha channel)
+image = load_image("notebook/images/single/hf_3d_arena/a_baby_penguin_wearing_a_blue_hat.png")
 
-< SIMPLE CODE TO RUN INFERENCE HERE >
+# run model
+output = inference(image, seed=42)
+
+# export gaussian splat
+output["gs"].save_ply(f"splat.ply")
+```
 
 < Link to Colab Notebook >
-
-### Video prediction
-
-< Optional: Do we want to add tooling to run inference on videos? >
-
-< Link to Colab Notebook >
-
-## Load from 🤗 Hugging Face
-
-Alternatively, models can also be loaded from [Hugging Face](https://huggingface.co/models?search=facebook/sam2) (requires `pip install huggingface_hub`).
-
-For image prediction:
-
-< Code sample to load and run inference with huggingface >
 
 ## Model Description
 
 ### SAM 3D checkpoints
 
-The table below shows the SAM 3D checkpoints released on September 23, 2025.
-
-< Table with model, size, speed, and MPJPE >
+The table below shows the SAM 3D Objects checkpoints released on October 20, 2025.
 
 |      **Model**       | **Size (M)** |    **Speed (FPS)**     | **<Dataset> test (PCK @ 0.05)** | **<Dataset> test (MPJPE)** |
 | :------------------: | :----------: | :--------------------: | :-----------------: | :----------------: |
@@ -66,27 +62,11 @@ The table below shows the SAM 3D checkpoints released on September 23, 2025.
 < TODO: Update when we run speedtests >
 Speed measured on an A100 with `torch 2.5.1, cuda 12.4`. See `benchmark.py` for an example on benchmarking (compiling all the model components). Compiling only the image encoder can be more flexible and also provide (a smaller) speed-up (set `compile_image_encoder: True` in the config).
 
-## Segment Anything 3D Dataset
-
-< Info on the 3D annotations we're releasing >
-
-## Training SAM 3D
-
-You can train or fine-tune SAM 3D on custom datasets of images, videos, or both.
-
-< Link to training README >
-
 ## Web demo for SAM 3D
 
 < Link to Web Demo >
 
-## License
-
-< TODO: Add License Type once it's decided >
-
 ## Contributing
-
-< TODO: Add contributing.md and code_of_conduct.md >
 
 See [contributing](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md).
 
@@ -100,6 +80,6 @@ Third-party code: < Credit third party code here >
 
 ## Citing SAM 3D
 
-If you use SAM 3D or the SAM3D dataset in your research, please use the following BibTeX entry.
+If you use SAM 3D Objects in your research, please use the following BibTeX entry.
 
 < TODO: Add bibtex here >
